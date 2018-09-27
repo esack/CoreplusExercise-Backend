@@ -22,21 +22,18 @@ namespace CoreplusExercise.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<PractitionerBaseDTO>), 200)]
-        public async Task<IActionResult> GetPractitioners([FromQuery] long fromDate, [FromQuery] long toDate)
-        {
-            var dateFrom = DateTimeOffset.FromUnixTimeSeconds(fromDate).UtcDateTime;
-            var dateTo = DateTimeOffset.FromUnixTimeSeconds(toDate).UtcDateTime;
-
-            var practitioners = _mapper.Map< List<PractitionerBaseDTO>>(await _practitionerManager.GetPractitionersAsync(dateFrom, dateTo));
+        public async Task<IActionResult> GetPractitioners([FromQuery] long fromUnixTimeMilliseconds, [FromQuery] long toUnixTimeMilliseconds)
+        {           
+            var practitioners = _mapper.Map< List<PractitionerBaseDTO>>(await _practitionerManager.GetPractitionersAsync(fromUnixTimeMilliseconds, toUnixTimeMilliseconds));
 
             return Ok(new { practitioners });
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(PractitionerDTO), 200)]
-        public async Task<IActionResult> GetPractitioner(Guid id)
+        public async Task<IActionResult> GetPractitioner(Guid id, [FromQuery] long fromUnixTimeMilliseconds, [FromQuery] long toUnixTimeMilliseconds)
         {
-            var practitioner = _mapper.Map<PractitionerDTO>(await _practitionerManager.GetPractitionerAsync(id));
+            var practitioner = _mapper.Map<PractitionerDTO>(await _practitionerManager.GetPractitionerAsync(id, fromUnixTimeMilliseconds, toUnixTimeMilliseconds));
 
             return Ok(new { practitioner });
         }

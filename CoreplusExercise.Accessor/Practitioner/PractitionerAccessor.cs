@@ -20,11 +20,17 @@ namespace CoreplusExercise.Accessor.Practitioner
             _mapper = mapper;
         }
 
-        public async Task<PractitionerDTO> GetPractitionerAsync(Guid id)
+        public async Task<PractitionerDTO> GetPractitionerAsync(Guid id, DateTime dateFrom, DateTime dateTo)
         {
-            var practitioner = await _context.Practitioners.Where(r => r.Id == id).Include(r => r.Appointments).SingleAsync();
+            var query = await (from p in _context.Practitioners
+                        join a in _context.Appointments on p.Id equals a.PractitionerId
+                        where p.Id == id && a.Date >= dateFrom && a.Date <= dateTo
+                        select new { Practitioner = p, Appointment = a }).ToListAsync();
 
-            return _mapper.Map<PractitionerDTO>(practitioner);
+            var practitioner = _mapper.Map<PractitionerDTO>(query[0].Practitioner);
+            practitioner.Appointments = _mapper.Map<List<AppointmentDTO>>(query.Select(r => r.Appointment).ToList());
+
+            return practitioner;
         }
 
         public async Task<List<PractitionerBaseDTO>> GetPractitionersAsync(DateTime dateFrom, DateTime dateTo)
@@ -33,15 +39,7 @@ namespace CoreplusExercise.Accessor.Practitioner
                         join p in _context.Practitioners on a.PractitionerId equals p.Id
                         where a.Date >= dateFrom && a.Date <= dateTo
                         group a by p into g
-                        select _mapper.Map<PractitionerBaseDTO>(g);
-                        //new PractitionerBaseDTO
-                        //{
-                        //    Id = g.Key.Id,
-                        //    FirstName = g.Key.FirstName,
-                        //    LastName = g.Key.LastName,
-                        //    Cost = g.Sum(a => a.Cost),
-                        //    Revenu = g.Sum(a => a.Revenu)
-                        //};
+                        select _mapper.Map<PractitionerBaseDTO>(g);                   
 
             return await query.ToListAsync();
         }

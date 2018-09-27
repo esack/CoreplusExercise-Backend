@@ -18,16 +18,22 @@ namespace CoreplusExercise.Managers.Practitioner
             _mapper = mapper;
         }
 
-        public async Task<List<PractitionerBaseDTO>> GetPractitionersAsync(DateTime dateFrom, DateTime dateTo)
+        public async Task<List<PractitionerBaseDTO>> GetPractitionersAsync(long fromUnixTimeMilliseconds, long toUnixTimeMilliseconds)
         {
+            var dateFrom = DateTimeOffset.FromUnixTimeMilliseconds(fromUnixTimeMilliseconds).UtcDateTime;
+            var dateTo = DateTimeOffset.FromUnixTimeMilliseconds(toUnixTimeMilliseconds).UtcDateTime;
+
             var practitioners = await _practitionerAccessor.GetPractitionersAsync(dateFrom, dateTo);
 
             return _mapper.Map<List<PractitionerBaseDTO>>(practitioners);
         }
 
-        public async Task<PractitionerDTO> GetPractitionerAsync(Guid id)
+        public async Task<PractitionerDTO> GetPractitionerAsync(Guid id, long fromUnixTimeMilliseconds, long toUnixTimeMilliseconds)
         {
-            var practitioner = await _practitionerAccessor.GetPractitionerAsync(id);
+            var dateFrom = DateTimeOffset.FromUnixTimeMilliseconds(fromUnixTimeMilliseconds).UtcDateTime;
+            var dateTo = DateTimeOffset.FromUnixTimeMilliseconds(toUnixTimeMilliseconds).UtcDateTime;
+
+            var practitioner = await _practitionerAccessor.GetPractitionerAsync(id, dateFrom, dateTo);
 
             return _mapper.Map<PractitionerDTO>(practitioner);
         }

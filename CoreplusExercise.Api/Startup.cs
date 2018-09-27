@@ -30,6 +30,7 @@ namespace CoreplusExercise.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddDbContext<PractitionerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             string basePath = PlatformServices.Default.Application.ApplicationBasePath;
@@ -60,6 +61,20 @@ namespace CoreplusExercise.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
         {
+            var origins = new string[]
+            {
+                "http://localhost:8080"
+            };
+
+            app.UseCors(builder =>
+                builder.WithOrigins(origins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithExposedHeaders()
+                    .AllowCredentials()
+                    .AllowAnyOrigin()
+                );
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
