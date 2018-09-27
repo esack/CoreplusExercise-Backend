@@ -14,6 +14,7 @@ using Autofac.Extensions.DependencyInjection;
 using CoreplusExercise.Accessor.Practitioner.DependencyInjection;
 using CoreplusExercise.Accessor;
 using CoreplusExercise.Managers.Practitioner.DependencyInjection;
+using CoreplusExercise.Accessor.Mock.DependencyInjection;
 
 namespace CoreplusExercise.Api
 {
@@ -47,6 +48,7 @@ namespace CoreplusExercise.Api
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
+            builder.RegisterModule<MockAccessorModule>();
             builder.RegisterModule<PractitionerAccessorModule>();
             builder.RegisterModule<PractitionerManagerModule>();
             

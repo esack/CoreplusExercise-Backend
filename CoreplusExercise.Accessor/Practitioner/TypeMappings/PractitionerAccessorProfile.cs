@@ -10,7 +10,9 @@ namespace CoreplusExercise.Accessor.Practitioner.TypeMappings
         public PractitionerAccessorProfile()
         {
             CreateMap<PractitionerDO, PractitionerDTO>()
-                .IncludeBase<PractitionerDO, PractitionerBaseDTO>()
+                .IncludeBase<PractitionerDO, PractitionerBaseDTO>();
+
+            CreateMap<PractitionerDO, PractitionerDTO>()
                 .ForMember(practitionerDTO => practitionerDTO.Cost, opt => opt.ResolveUsing(practitionerDO => practitionerDO.Appointments.Sum(r => r.Cost)))
                 .ForMember(practitionerDTO => practitionerDTO.Revenu, opt => opt.ResolveUsing(practitionerDO => practitionerDO.Appointments.Sum(r => r.Revenu)));
 
@@ -20,9 +22,15 @@ namespace CoreplusExercise.Accessor.Practitioner.TypeMappings
                 .ForMember(appointmentDTO => appointmentDTO.AppointmentType, opt => opt.ResolveUsing<LookupAppointmentTypeResolver>());
 
             CreateMap<IGrouping<PractitionerDO, AppointmentDO>, PractitionerBaseDTO>()
-                .BeforeMap((src, dest, cntx) => { dest = cntx.Mapper.Map<PractitionerBaseDTO>(src.Key); })
                 .ForMember(practitionerBaseDTO => practitionerBaseDTO.Cost, opt => opt.ResolveUsing(group => group.Sum(a => a.Cost)))
-                .ForMember(practitionerBaseDTO => practitionerBaseDTO.Revenu, opt => opt.ResolveUsing(group => group.Sum(a => a.Revenu)));
+                .ForMember(practitionerBaseDTO => practitionerBaseDTO.Revenu, opt => opt.ResolveUsing(group => group.Sum(a => a.Revenu)))
+                .AfterMap((src, dest, cntx) =>
+                {
+                    dest = cntx.Mapper.Map(src.Key, dest);
+                });
+
+            CreateMap<Mock.DTOs.AppointmentDTO, AppointmentDO>();
+            CreateMap<Mock.DTOs.PractitionerDTO, PractitionerDO>();
         }
     }
 }

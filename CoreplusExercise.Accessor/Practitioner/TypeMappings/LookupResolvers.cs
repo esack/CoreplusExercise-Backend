@@ -22,7 +22,16 @@ namespace CoreplusExercise.Accessor.Practitioner.TypeMappings
                     switch (source.AppointmentType)
                     {
                         case 1:
-                            appointmentType = "";
+                            appointmentType = "Visit";
+                            break;
+                        case 2:
+                            appointmentType = "House visit";
+                            break;
+                        case 3:
+                            appointmentType = "Full check-up";
+                            break;
+                        case 4:
+                            appointmentType = "Check-up";
                             break;
                         default:
                             break;

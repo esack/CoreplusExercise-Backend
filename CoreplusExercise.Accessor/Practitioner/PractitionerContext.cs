@@ -6,12 +6,12 @@ namespace CoreplusExercise.Accessor.Practitioner
 {
     public class PractitionerContext : DbContext
     {
-        public DbSet<PractitionerDO> Practitioners { get; set; }
-        public DbSet<AppointmentDO> Appointments { get; set; }
+        public PractitionerContext(DbContextOptions<PractitionerContext> options) : base(options)
+        {
 
-        //public PractitionerContext(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-        //}
+        }
+
+        internal DbSet<PractitionerDO> Practitioners { get; set; }
+        internal DbSet<AppointmentDO> Appointments { get; set; }
     }
 }

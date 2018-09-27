@@ -8,10 +8,10 @@ namespace CoreplusExercise.Managers.Practitioner.TypeMappings
     {
         public PractitionerManagerProfile()
         {
-            CreateMap<Accessor.Practitioner.DTOs.PractitionerBaseDTO, PractitionerBaseDTO>();
-
             CreateMap<Accessor.Practitioner.DTOs.PractitionerDTO, PractitionerDTO>()
-                .IncludeBase<Accessor.Practitioner.DTOs.PractitionerDTO, PractitionerBaseDTO>();
+                .IncludeBase<Accessor.Practitioner.DTOs.PractitionerBaseDTO, PractitionerBaseDTO>();
+
+            CreateMap<Accessor.Practitioner.DTOs.PractitionerBaseDTO, PractitionerBaseDTO>();
 
             CreateMap<Accessor.Practitioner.DTOs.AppointmentDTO, AppointmentDTO>();
         }

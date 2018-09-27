@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using AutoMapper;
+using CoreplusExercise.Accessor.Mock;
 using CoreplusExercise.Accessor.Practitioner;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -18,8 +20,10 @@ namespace CoreplusExercise.Api
                 try
                 {
                     var context = scope.Resolve<PractitionerContext>();
-
-                    PractitionerContextInitializer.Initialize(context);
+                    var mockAccessor = scope.Resolve<IMockAccessor>();
+                    var mapper = scope.Resolve<IMapper>();
+                    
+                    PractitionerContextInitializer.Initialize(context, mockAccessor, mapper);
                 }
                 catch (Exception ex)
                 {

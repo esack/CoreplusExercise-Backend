@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CoreplusExercise.Accessor.Practitioner.DOs
 {
     [Table("Practitioners")]
-    public class PractitionerDO
+    internal class PractitionerDO
     {
         [Key]
         public Guid Id { get; set; }

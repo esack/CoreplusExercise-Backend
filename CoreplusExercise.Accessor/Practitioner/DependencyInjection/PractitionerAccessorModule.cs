@@ -7,7 +7,7 @@ namespace CoreplusExercise.Accessor.Practitioner.DependencyInjection
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PractitionerAccessor>().As<IPractitionerAccessor>();
-            builder.RegisterType<PractitionerContext>().InstancePerRequest();
+            builder.RegisterType<PractitionerContext>().SingleInstance();
         }
     }
 }
